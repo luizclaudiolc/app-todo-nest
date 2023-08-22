@@ -1,6 +1,13 @@
+// import { IsString } from 'class-validator';
+import { IsBoolean, IsString } from 'class-validator';
+
 export class CreateTaskDto {
-  id: number;
+  @IsString()
   title: string;
+
+  @IsString()
   body: string;
+
+  @IsBoolean()
   done: boolean;
 }

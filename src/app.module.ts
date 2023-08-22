@@ -12,7 +12,7 @@ import { join } from 'path';
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: process.env.DATABASE_USER,
+      host: process.env.DATABASE_URL,
       port: 3306,
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,

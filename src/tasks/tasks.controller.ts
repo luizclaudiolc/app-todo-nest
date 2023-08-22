@@ -9,36 +9,39 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { CreateTaskDto } from './dto/create-task.dto';
-import { TaskResponse, TasksService } from './tasks.service';
-import { Task } from 'src/tasks/interfaces/task.interface';
+import { TasksService } from './tasks.service';
+import { Task } from './tasks.entity';
+// import { Task } from 'src/tasks/interfaces/task.interface';
 
 @Controller('tasks')
 export class TasksController {
   constructor(private taskService: TasksService) {}
 
-  @Post()
-  create(@Body() createTaskDto: CreateTaskDto): Observable<CreateTaskDto> {
-    return this.taskService.create(createTaskDto);
+  @Post('create')
+  create(@Body() createTaskDto: CreateTaskDto): Observable<Task> {
+    return this.taskService.createTask(createTaskDto);
   }
 
-  @Get()
+  @Get('all')
   findAll(): Observable<Task[]> {
-    return this.taskService.findAll();
+    return this.taskService.getTasks();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string): Observable<TaskResponse> {
-    return this.taskService.findOne(id);
+  @Get('/:taskId')
+  findOne(@Param('taskId') taskId: number): Observable<Task> {
+    return this.taskService.getTask(taskId);
   }
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() task: Task): Observable<Task> {
-    task.id = +id;
-    return this.taskService.update(task);
+  @Put('/edit/:taskId')
+  update(
+    @Param('taskId') taskId: number,
+    @Body() task: Task,
+  ): Observable<Task> {
+    return this.taskService.updateTask(taskId, task);
   }
 
-  @Delete(':id')
-  delete(@Param('id') id: string): Observable<Task> {
-    return this.taskService.delete(id);
+  @Delete('/delete/:taskId')
+  delete(@Param('taskId') taskId: number) {
+    this.taskService.delete(taskId);
   }
 }
