@@ -16,12 +16,6 @@ export class TasksService {
   constructor(
     @InjectRepository(Task) private taskRepository: Repository<Task>,
   ) {}
-  // private readonly task: Task[] = Array.from({ length: 20 }, (_, i) => ({
-  //   id: i + 1,
-  //   title: `Title ${i + 1}`,
-  //   body: `Body ${i + 1}`,
-  //   done: i % 2 === 0 ? true : false,
-  // }));
 
   createTask(task: CreateTaskDto): Observable<Task> {
     const newTask = this.taskRepository.create(task);
