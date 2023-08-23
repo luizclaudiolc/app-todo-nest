@@ -11,7 +11,6 @@ import { Observable } from 'rxjs';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { TasksService } from './tasks.service';
 import { Task } from './tasks.entity';
-// import { Task } from 'src/tasks/interfaces/task.interface';
 
 @Controller('tasks')
 export class TasksController {
