@@ -1,4 +1,11 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity()
 export class Task extends BaseEntity {
@@ -13,4 +20,10 @@ export class Task extends BaseEntity {
 
   @Column()
   done: boolean;
+
+  @CreateDateColumn({ name: 'create_at' })
+  createAt: string;
+
+  @UpdateDateColumn({ name: 'update_at' })
+  updateAt: string;
 }
