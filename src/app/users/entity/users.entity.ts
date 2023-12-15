@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { hashSync } from 'bcrypt';
+import { hashSync } from 'bcryptjs';
 
 @Entity({ name: 'users' })
 export class UsersEntity {
