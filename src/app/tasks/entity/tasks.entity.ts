@@ -2,6 +2,7 @@ import {
   BaseEntity,
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -26,4 +27,7 @@ export class Task extends BaseEntity {
 
   @UpdateDateColumn({ name: 'update_at' })
   updateAt: string;
+
+  @DeleteDateColumn({ name: 'delete_at' })
+  deleteAt: string;
 }

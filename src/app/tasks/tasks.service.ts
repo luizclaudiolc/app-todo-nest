@@ -3,7 +3,7 @@ import { Observable, catchError, from, map, of, throwError } from 'rxjs';
 // import { Task as TaskInterface } from 'src/tasks/interfaces/task.interface';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Task } from './tasks.entity';
+import { Task } from './entity/tasks.entity';
 import { Repository } from 'typeorm';
 
 // export interface TaskResponse {

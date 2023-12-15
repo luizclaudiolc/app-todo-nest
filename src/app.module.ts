@@ -3,9 +3,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 
-import { TasksModule } from './tasks/tasks.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { join } from 'path';
+import { TasksModule } from './app/tasks/tasks.module';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+// import { join } from 'path';
+import { UsersModule } from './app/users/users.module';
 
 @Module({
   imports: [
@@ -17,13 +18,14 @@ import { join } from 'path';
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
-      entities: [join(__dirname, '**', '*.entity.{ts,js}')],
-      synchronize: true,
+      entities: [__dirname + '/**/*.entity.{ts,js}'],
+      synchronize: false,
       ssl: {
         rejectUnauthorized: true,
       },
-    }),
+    } as TypeOrmModuleOptions),
     TasksModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
