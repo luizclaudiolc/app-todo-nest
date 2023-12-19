@@ -24,21 +24,21 @@ export class UsersController {
   }
 
   @Post()
-  store(@Body() body: CreateUserDto): Observable<any> {
-    return this.userService.store(body);
+  async store(@Body() body: CreateUserDto): Promise<any> {
+    return await this.userService.store(body);
   }
 
   @Get(':id')
-  show(@Param('id') id: number): Observable<any> {
-    return this.userService.findOne(id);
+  async show(@Param('id') id: number): Promise<CreateUserDto> {
+    return await this.userService.findOne(id);
   }
 
   @Put(':id')
-  update(
+  async update(
     @Param('id') id: number,
     @Body() body: UpdateUserDto,
-  ): Observable<any> {
-    return this.userService.update(id, body);
+  ): Promise<any> {
+    return await this.userService.update(id, body);
   }
 
   @Delete(':id')

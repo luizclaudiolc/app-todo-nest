@@ -1,18 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  Observable,
-  catchError,
-  from,
-  map,
-  of,
-  switchMap,
-  throwError,
-} from 'rxjs';
+import { Observable, from, of } from 'rxjs';
 import { Repository } from 'typeorm';
-import { UsersEntity } from './entity/users.entity';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { UsersEntity } from './entity/users.entity';
 
 @Injectable()
 export class UsersService {
@@ -29,42 +21,51 @@ export class UsersService {
     );
   }
 
-  findOne(id: number): Observable<any> {
-    return from(this.usersRepository.findOne({ where: { id } })).pipe(
-      catchError(() =>
-        throwError(new NotFoundException(`User with ${id} not found`)),
-      ),
-      map((user) => {
-        if (!user) {
-          throw new NotFoundException(`User with ${id} not found`);
-        }
-        this.usersRepository.findOneBy({ id });
-        return user;
-      }),
-    );
+  async findOne(id: number): Promise<CreateUserDto> {
+    try {
+      const user = await this.usersRepository.findOneBy({ id });
+
+      if (!user) {
+        throw new NotFoundException(`User with ${id} not found`);
+      }
+
+      this.usersRepository.findOneBy({ id });
+      return await user;
+    } catch (error) {
+      throw error;
+    }
   }
 
-  store(data: CreateUserDto): Observable<any> {
+  async store(data: CreateUserDto): Promise<CreateUserDto> {
+    const existingUser = await this.usersRepository.findOneBy({
+      email: data.email,
+    });
+    if (existingUser) {
+      throw new NotFoundException(`Email já cadastrado.`);
+    }
+
     const user = this.usersRepository.create(data);
-    return from(this.usersRepository.save(user));
+    return await this.usersRepository.save(user);
   }
 
-  update(id: number, data: UpdateUserDto): Observable<any> {
-    return from(this.usersRepository.findOne({ where: { id } })).pipe(
-      catchError(() => throwError(new NotFoundException('User not found'))),
-      switchMap((user) => {
-        if (!user) {
-          throw new NotFoundException('User not found');
-        }
+  async update(id: number, data: UpdateUserDto): Promise<UpdateUserDto> {
+    try {
+      const user = await this.usersRepository.findOne({ where: { id } });
 
-        this.usersRepository.merge(user, data);
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
 
-        return from(this.usersRepository.save(user));
-      }),
-    );
+      this.usersRepository.merge(user, data);
+
+      const updatedUser = await this.usersRepository.save(user);
+      return updatedUser;
+    } catch (error) {
+      throw error;
+    }
   }
 
-  delete(id: number): Observable<any> {
+  delete(id: number): Observable<CreateUserDto> {
     from(this.usersRepository.findOneByOrFail({ id }));
     this.usersRepository.softDelete({ id });
     return of(null);
